@@ -56,8 +56,7 @@ public class FormBoat implements Updated {
                 boatPanel.repaint();
             }
         } );
-        Up.setIcon( new ImageIcon(
-                "C:\\Users\\aleca\\worcspace\\JavaFormsBoat\\up.jpg" ) );
+        Up.setIcon( new ImageIcon("C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\up.jpg") );
         Up.setBounds( 690, 352, 35, 35 );
         frame.getContentPane().add( Up );
 
@@ -65,7 +64,7 @@ public class FormBoat implements Updated {
         Down.setBackground( UIManager
                 .getColor( "PasswordField.selectionBackground" ) );
         Down.setIcon( new ImageIcon(
-                "C:\\Users\\aleca\\worcspace\\JavaFormsBoat\\down.jpg" ) );
+                "C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\down.jpg" ) );
         Down.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 boat.MoveTransport( Direction.Down );
@@ -78,7 +77,7 @@ public class FormBoat implements Updated {
         Rigth = new JButton( "" );
         Rigth.setBackground( UIManager.getColor( "MenuItem.selectionBackground" ) );
         Rigth.setIcon( new ImageIcon(
-                "C:\\Users\\aleca\\worcspace\\JavaFormsBoat\\rigth.jpg" ) );
+                "C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\rigth.jpg" ) );
         Rigth.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 boat.MoveTransport( Direction.Right );
@@ -97,7 +96,7 @@ public class FormBoat implements Updated {
             }
         } );
         Left.setIcon( new ImageIcon(
-                "C:\\Users\\aleca\\worcspace\\JavaFormsBoat\\left.jpg" ) );
+                "C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\left.jpg" ) );
         Left.setBounds( 656, 383, 35, 35 );
         frame.getContentPane().add( Left );
 
