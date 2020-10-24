@@ -73,7 +73,4 @@ import java.awt.Color;
              g.drawLine(_startPosX, _startPosY + 22, _startPosX + 100, _startPosY + 22);
 
         }
-        
-       
-  
 }

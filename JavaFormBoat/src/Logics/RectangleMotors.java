@@ -10,31 +10,31 @@ public class RectangleMotors implements IAdditional {
     public int countMotors;
 
     public RectangleMotors(int CountMotors) {
-        setCountMotors(CountMotors);
+        setCountMotors( CountMotors );
     }
 
-	@Override
-	public void setCountMotors(int countMotors) {
-    	addEnumMotors = AdditionalEnumMotors.definitionEnumMotors(countMotors);
-	}
+    @Override
+    public void setCountMotors(int countMotors) {
+        addEnumMotors = AdditionalEnumMotors.definitionEnumMotors( countMotors );
+    }
 
     public void drawMotors(Graphics g, Color dopColor, int xPos, int yPos) {
         switch (addEnumMotors) {
             case threeMotors: {
                 g.setColor( dopColor );
                 g.fillRect( xPos + 100,
-                		yPos + 22, 5, 5 );
+                        yPos + 22, 5, 5 );
             }
             case twoMotors: {
                 g.setColor( dopColor );
                 g.fillRect( xPos + 100,
-                		yPos + 16, 5, 5 );
+                        yPos + 16, 5, 5 );
             }
             case oneMotors: {
                 g.setColor( dopColor );
                 g.fillRect( xPos + 100,
-                		yPos + 10, 5, 5 );
+                        yPos + 10, 5, 5 );
             }
         }
-    }	
+    }
 }

@@ -1,4 +1,5 @@
 package Form;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -59,8 +60,8 @@ public class FormBoat implements Updated {
         frame.setBounds( 100, 100, 831, 549 );
         frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         frame.getContentPane().setLayout( null );
-        
-        boatPanel = new BoatPanel( boat);
+
+        boatPanel = new BoatPanel( boat );
         boatPanel.setBackground( new Color( 135, 206, 250 ) );
         boatPanel.setBounds( 0, 0, 603, 493 );
         frame.getContentPane().add( boatPanel );
@@ -73,7 +74,7 @@ public class FormBoat implements Updated {
                 boatPanel.repaint();
             }
         } );
-        btnUp.setIcon( new ImageIcon("C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\up.jpg") );
+        btnUp.setIcon( new ImageIcon( "C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\up.jpg" ) );
         btnUp.setBounds( 690, 352, 35, 35 );
         frame.getContentPane().add( btnUp );
 
@@ -120,13 +121,13 @@ public class FormBoat implements Updated {
         btnCreate = new JButton( "Создать лодку" );
         btnCreate.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-            	boat = new Boat( random.nextInt( 300 ), random.nextInt( 1000 ), Color.GREEN);
-            	boatPanel.setBoat(boat);
+                boat = new Boat( random.nextInt( 300 ), random.nextInt( 1000 ), Color.GREEN );
+                boatPanel.setBoat( boat );
                 boat.SetPosition( random.nextInt( 200 ), random.nextInt( 200 ),
                         boatPanel.getWidth(), boatPanel.getHeight() );
-                lblTypeMotors.setText("Тип моторов: ");
+                lblTypeMotors.setText( "Тип моторов: " );
                 lblCountMotors.setText( "Кол-во моторов: " );
-                
+
                 boatPanel.repaint();
             }
         } );
@@ -134,51 +135,48 @@ public class FormBoat implements Updated {
         btnCreate.setBounds( 638, 79, 156, 35 );
         frame.getContentPane().add( btnCreate );
 
-       
-
         lblCountMotors = new JLabel( "Кол-во моторов: " );
         lblCountMotors.setBackground( new Color( 173, 216, 230 ) );
         lblCountMotors.setBounds( 618, 16, 176, 29 );
         frame.getContentPane().add( lblCountMotors );
-        
-        lblTypeMotors = new JLabel("Тип моторов:");
-        lblTypeMotors.setBounds(618, 45, 191, 20);
-        frame.getContentPane().add(lblTypeMotors);
-        
-        
-        
-        btnMotorBoat = new JButton("Создать катер ");
-        btnMotorBoat.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
-        		typeMotors = random.nextInt( 3 ) + 1;
+
+        lblTypeMotors = new JLabel( "Тип моторов:" );
+        lblTypeMotors.setBounds( 618, 45, 191, 20 );
+        frame.getContentPane().add( lblTypeMotors );
+
+        btnMotorBoat = new JButton( "Создать катер " );
+        btnMotorBoat.addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                typeMotors = random.nextInt( 3 ) + 1;
                 countMotor = random.nextInt( 3 ) + 1;
-                boat = new MotorBoat(100, 1000, Color.GREEN, Color.RED, true, true, true,typeMotors,countMotor);
-                boatPanel.setBoat(boat);
+                boat = new MotorBoat( 100, 1000, Color.GREEN, Color.RED, true, true, true, typeMotors, countMotor );
+                boatPanel.setBoat( boat );
                 boat.SetPosition( random.nextInt( 200 ), random.nextInt( 200 ),
                         boatPanel.getWidth(), boatPanel.getHeight() );
                 lblCountMotors.setText( "Кол-во моторов: " + countMotor );
-                lblTypeMotorsIn(typeMotors);
+                lblTypeMotorsIn( typeMotors );
                 boatPanel.repaint();
-        	}
-        });
-        btnMotorBoat.setBounds(638, 145, 156, 35);
-        frame.getContentPane().add(btnMotorBoat);
+            }
+        } );
+        btnMotorBoat.setBounds( 638, 145, 156, 35 );
+        frame.getContentPane().add( btnMotorBoat );
     }
 
-    public void lblTypeMotorsIn(int typeMotors){
-    	if(typeMotors == 1){
-    		lblTypeMotors.setText("Тип моторов: " + "эллипсический");
-    	}
-    	if(typeMotors == 2){
-    		lblTypeMotors.setText("Тип моторов: " + "прямоугольный");
-    	}
-    	if(typeMotors == 3){
-    		lblTypeMotors.setText("Тип моторов: " + "смешанный");
-    	}
+    public void lblTypeMotorsIn(int typeMotors) {
+        if (typeMotors == 1) {
+            lblTypeMotors.setText( "Тип моторов: " + "эллипсический" );
+        }
+        if (typeMotors == 2) {
+            lblTypeMotors.setText( "Тип моторов: " + "прямоугольный" );
+        }
+        if (typeMotors == 3) {
+            lblTypeMotors.setText( "Тип моторов: " + "смешанный" );
+        }
     }
+
     @Override
     public void update() {
-    	if(boat!=null)
-        boatPanel.repaint();
+        if (boat != null)
+            boatPanel.repaint();
     }
 }

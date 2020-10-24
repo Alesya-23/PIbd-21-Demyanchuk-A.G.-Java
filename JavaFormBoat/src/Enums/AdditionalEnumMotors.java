@@ -1,22 +1,23 @@
 package Enums;
+
 public enum AdditionalEnumMotors {
 
-	oneMotors,
+    oneMotors,
 
-	twoMotors,
+    twoMotors,
 
-	threeMotors;
+    threeMotors;
 
-	public static AdditionalEnumMotors definitionEnumMotors(int countMotors) {
-		 if (countMotors == 1) {
-             return oneMotors;
-         }
-         if (countMotors == 2) {
-        	 return twoMotors;
-         }
-         if (countMotors == 3) {
-             return threeMotors;
-         }
-         return null;
-	}
+    public static AdditionalEnumMotors definitionEnumMotors(int countMotors) {
+        if (countMotors == 1) {
+            return oneMotors;
+        }
+        if (countMotors == 2) {
+            return twoMotors;
+        }
+        if (countMotors == 3) {
+            return threeMotors;
+        }
+        return null;
+    }
 }
