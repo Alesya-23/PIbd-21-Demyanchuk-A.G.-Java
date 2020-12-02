@@ -1,0 +1,121 @@
+package Form;
+
+import java.awt.EventQueue;
+
+import javax.swing.JColorChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JTree;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+
+import Boat.Boat;
+import Boat.Parking;
+
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class FormParking {
+
+	protected static final String JOptionPane = null;
+	private JFrame frame;
+	private JTextField textFieldGetPlace;
+	private ParkingPanel panelParking;
+	private Parking<Boat> parking;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					FormParking window = new FormParking();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public FormParking() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 778, 546);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+
+		panelParking = new ParkingPanel(parking);
+		panelParking.setBackground(new Color(135, 206, 250));
+		panelParking.setBounds(0, 0, 549, 490);
+		frame.getContentPane().add(panelParking);
+
+		parking = new Parking<Boat>(panelParking.getWidth(),
+				panelParking.getHeight());
+		panelParking.setBoat(parking);
+		panelParking.repaint();
+
+		JButton btnParkingBoat = new JButton("Припарковать лодку");
+		btnParkingBoat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Color mainColor = JColorChooser.showDialog(frame,
+						"Выберите цвет автобуса", Color.BLUE);
+				if (mainColor != null) {
+					var boat = new Boat(100, 1000, mainColor);
+					if (parking.add(boat)) {
+						panelParking.repaint();
+					} else {
+						JOptionPane.showMessageDialog(frame,
+								"Автовокзал переполнен", "Сообщение",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+				panelParking.repaint();
+			}
+		});
+		btnParkingBoat.setBounds(556, 16, 185, 51);
+		frame.getContentPane().add(btnParkingBoat);
+
+		JButton bthParkingMotorBoat = new JButton("Припарковать катер");
+		bthParkingMotorBoat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		bthParkingMotorBoat.setBounds(556, 83, 185, 29);
+		frame.getContentPane().add(bthParkingMotorBoat);
+
+		textFieldGetPlace = new JTextField();
+		textFieldGetPlace.setBounds(657, 299, 84, 26);
+		frame.getContentPane().add(textFieldGetPlace);
+		textFieldGetPlace.setColumns(10);
+
+		JButton btnTakeBoat = new JButton("Забрать");
+		btnTakeBoat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnTakeBoat.setBounds(605, 341, 115, 29);
+		frame.getContentPane().add(btnTakeBoat);
+
+		JLabel lblPlaceBoat = new JLabel("Место");
+		lblPlaceBoat.setBounds(574, 302, 69, 20);
+		frame.getContentPane().add(lblPlaceBoat);
+
+		JLabel lblPickUpBoat = new JLabel("Забрать лодку");
+		lblPickUpBoat.setBounds(592, 263, 115, 20);
+		frame.getContentPane().add(lblPickUpBoat);
+	}
+}
