@@ -56,7 +56,7 @@ public class FormBoat implements Updated {
                 boatPanel.repaint();
             }
         } );
-        btnUp.setIcon( new ImageIcon("C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\up.jpg") );
+        btnUp.setIcon( new ImageIcon( "C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\up.jpg" ) );
         btnUp.setBounds( 690, 352, 35, 35 );
         frame.getContentPane().add( btnUp );
 

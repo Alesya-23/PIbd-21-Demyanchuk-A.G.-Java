@@ -1,14 +1,14 @@
 public enum AdditionalEnumMotors {
 
-	oneMotors(1),
+    oneMotors( 1 ),
 
-	twoMotors(2),
+    twoMotors( 2 ),
 
-	threeMotors(3);
+    threeMotors( 3 );
 
-	private int value;
+    private int value;
 
-	AdditionalEnumMotors(int Value) {
-		this.value = Value;
-	}
+    AdditionalEnumMotors(int Value) {
+        this.value = Value;
+    }
 }
