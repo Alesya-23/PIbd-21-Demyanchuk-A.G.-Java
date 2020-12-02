@@ -20,6 +20,8 @@ import Boat.MotorBoat;
 import Enums.Direction;
 import Logics.Updated;
 
+import javax.swing.JList;
+
 public class FormBoat implements Updated {
     private JFrame frame;
     BoatPanel boatPanel;
