@@ -15,15 +15,13 @@ import javax.swing.UIManager;
 import javax.swing.JLabel;
 
 import Boat.Boat;
-import Boat.ITransportBoat;
 import Boat.MotorBoat;
 import Enums.Direction;
 import Logics.Updated;
 
-import javax.swing.JList;
-
 public class FormBoat implements Updated {
-    private JFrame frame;
+    public JFrame frame;
+    public JFrame parentFrame;
     BoatPanel boatPanel;
     Boat boat;
     final Random random = new Random();
@@ -31,19 +29,16 @@ public class FormBoat implements Updated {
     JButton btnRigth;
     JButton btnUp;
     JButton btnDown;
-    JButton btnCreate;
-    Direction direction;
+    JButton btnBack;
     JLabel lblCountMotors;
-    private int countMotor;
-    private int typeMotors;
     JLabel lblTypeMotors;
-    JButton btnMotorBoat;
 
-    public static void main(String[] args) {
+
+    public void run() {
         EventQueue.invokeLater( new Runnable() {
             public void run() {
                 try {
-                    FormBoat window = new FormBoat();
+                    FormBoat window = new FormBoat( parentFrame );
                     window.frame.setVisible( true );
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -52,8 +47,9 @@ public class FormBoat implements Updated {
         } );
     }
 
-    public FormBoat() {
+    public FormBoat(JFrame frame) {
         initialize();
+        this.parentFrame = frame;
     }
 
     private void initialize() {
@@ -62,6 +58,8 @@ public class FormBoat implements Updated {
         frame.setBounds( 100, 100, 831, 549 );
         frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         frame.getContentPane().setLayout( null );
+
+        boat = getBoat();
 
         boatPanel = new BoatPanel( boat );
         boatPanel.setBackground( new Color( 135, 206, 250 ) );
@@ -72,11 +70,12 @@ public class FormBoat implements Updated {
         btnUp.setBackground( UIManager.getColor( "MenuItem.selectionBackground" ) );
         btnUp.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+                boat = getBoat();
                 boat.MoveTransport( Direction.Up );
                 boatPanel.repaint();
             }
         } );
-        btnUp.setIcon( new ImageIcon( "C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\up.jpg" ) );
+        btnUp.setIcon( new ImageIcon( ".\\assets\\up.jpg" ) );
         btnUp.setBounds( 690, 352, 35, 35 );
         frame.getContentPane().add( btnUp );
 
@@ -84,9 +83,10 @@ public class FormBoat implements Updated {
         btnDown.setBackground( UIManager
                 .getColor( "PasswordField.selectionBackground" ) );
         btnDown.setIcon( new ImageIcon(
-                "C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\down.jpg" ) );
+                ".\\assets\\down.jpg" ) );
         btnDown.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+                boat = getBoat();
                 boat.MoveTransport( Direction.Down );
                 boatPanel.repaint();
             }
@@ -97,9 +97,10 @@ public class FormBoat implements Updated {
         btnRigth = new JButton( "" );
         btnRigth.setBackground( UIManager.getColor( "MenuItem.selectionBackground" ) );
         btnRigth.setIcon( new ImageIcon(
-                "C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\rigth.jpg" ) );
+                ".\\assets\\rigth.jpg" ) );
         btnRigth.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+                boat = getBoat();
                 boat.MoveTransport( Direction.Right );
                 boatPanel.repaint();
             }
@@ -111,30 +112,26 @@ public class FormBoat implements Updated {
         btnLeft.setBackground( UIManager.getColor( "MenuItem.selectionBackground" ) );
         btnLeft.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+                boat = getBoat();
                 boat.MoveTransport( Direction.Left );
                 boatPanel.repaint();
             }
         } );
         btnLeft.setIcon( new ImageIcon(
-                "C:\\Users\\aleca\\worcspace\\JavaFormBoat\\assets\\left.jpg" ) );
+                ".\\assets\\left.jpg" ) );
         btnLeft.setBounds( 656, 383, 35, 35 );
         frame.getContentPane().add( btnLeft );
 
-        btnCreate = new JButton( "Создать лодку" );
-        btnCreate.addActionListener( new ActionListener() {
+        btnBack = new JButton( "На парковку!" );
+        btnBack.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                boat = new Boat( random.nextInt( 300 ), random.nextInt( 1000 ), Color.GREEN );
-                boatPanel.setBoat( boat );
-                boat.SetPosition( random.nextInt( 200 ), random.nextInt( 200 ),
-                        boatPanel.getWidth(), boatPanel.getHeight() );
-                lblTypeMotors.setText( "Тип моторов: " );
-                lblCountMotors.setText( "Кол-во моторов: " );
-                boatPanel.repaint();
+                parentFrame.setVisible( true );
+                frame.setVisible( false );
             }
         } );
-        btnCreate.setBackground( new Color( 173, 216, 230 ) );
-        btnCreate.setBounds( 638, 79, 156, 35 );
-        frame.getContentPane().add( btnCreate );
+        btnBack.setBackground( new Color( 173, 216, 230 ) );
+        btnBack.setBounds( 638, 79, 156, 35 );
+        frame.getContentPane().add( btnBack );
 
         lblCountMotors = new JLabel( "Кол-во моторов: " );
         lblCountMotors.setBackground( new Color( 173, 216, 230 ) );
@@ -144,23 +141,6 @@ public class FormBoat implements Updated {
         lblTypeMotors = new JLabel( "Тип моторов:" );
         lblTypeMotors.setBounds( 618, 45, 191, 20 );
         frame.getContentPane().add( lblTypeMotors );
-
-        btnMotorBoat = new JButton( "Создать катер " );
-        btnMotorBoat.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                typeMotors = random.nextInt( 3 ) + 1;
-                countMotor = random.nextInt( 3 ) + 1;
-                boat = new MotorBoat( 100, 1000, Color.GREEN, Color.RED, true, true, true, typeMotors, countMotor );
-                boatPanel.setBoat( boat );
-                boat.SetPosition( random.nextInt( 200 ), random.nextInt( 200 ),
-                        boatPanel.getWidth(), boatPanel.getHeight() );
-                lblCountMotors.setText( "Кол-во моторов: " + countMotor );
-                lblTypeMotorsIn( typeMotors );
-                boatPanel.repaint();
-            }
-        } );
-        btnMotorBoat.setBounds( 638, 145, 156, 35 );
-        frame.getContentPane().add( btnMotorBoat );
     }
 
     public void lblTypeMotorsIn(int typeMotors) {
@@ -175,9 +155,25 @@ public class FormBoat implements Updated {
         }
     }
 
-  @Override
+    @Override
     public void update() {
         if (boat != null)
             boatPanel.repaint();
+    }
+
+    public Boat getBoat() {
+        return boat;
+    }
+
+    public void setBoat(Boat Doat) {
+        this.boat = Doat;
+        boat.SetPosition( random.nextInt( 200 ), random.nextInt( 200 ),
+                boatPanel.getWidth(), boatPanel.getHeight() );
+        boatPanel.setBoat( boat );
+        if (boat.getClass() == MotorBoat.class) {
+            lblTypeMotorsIn( ((MotorBoat) boat).getAddClass() );
+            lblCountMotors.setText( "Количество моторов: " + ((MotorBoat) boat).getCountMotors() );
+        }
+        boatPanel.repaint();
     }
 }

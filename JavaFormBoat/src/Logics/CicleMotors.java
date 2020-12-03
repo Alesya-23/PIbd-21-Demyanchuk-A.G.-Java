@@ -9,7 +9,7 @@ public class CicleMotors implements IAdditional {
     private AdditionalEnumMotors addEnumMotors;
 
     public CicleMotors(int countMotors) {
-    	setCountMotors( countMotors );
+        setCountMotors( countMotors );
     }
 
     @Override

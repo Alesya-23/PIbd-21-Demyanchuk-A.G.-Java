@@ -59,7 +59,6 @@ public class Boat extends Vehicle {
         }
     }
 
-    /// <summary>
     /// Отрисовка лодки
     @Override
     public void DrawTransport(Graphics g) {
@@ -68,6 +67,5 @@ public class Boat extends Vehicle {
         g.fillOval( _startPosX, _startPosY, 100, 35 );
         g.setColor( Color.WHITE );
         g.drawLine( _startPosX, _startPosY + 22, _startPosX + 100, _startPosY + 22 );
-
     }
 }

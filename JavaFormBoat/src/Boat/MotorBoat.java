@@ -9,23 +9,24 @@ import Logics.RectangleMotors;
 import Logics.TraungleMotors;
 
 public class MotorBoat extends Boat {
-    public IAdditional iAdditional;
+    private IAdditional iAdditional;
 
-    public Color DopColor;
-    /// <summary>
+    private Color DopColor;
+
     /// Признак наличия боковых линий
-    /// </summary>
-    public boolean SideLine;
+    private boolean SideLine;
 
     // наличие кабины
-    public boolean Cabin;
+    private boolean Cabin;
 
     // наличие мотора
-    public boolean Motors;
+    private boolean Motors;
 
-    /// <summary>
+    private int addClass;
+
+    private int countMotors;
+
     /// Конструктор
-
     public MotorBoat(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean sideLine, boolean cabin,
                      boolean motors, int AddClass, int countMotors) {
         super( maxSpeed, weight, mainColor, 110, 60 );
@@ -33,6 +34,8 @@ public class MotorBoat extends Boat {
         this.SideLine = sideLine;
         this.Cabin = cabin;
         this.Motors = motors;
+        this.addClass = AddClass;
+        this.countMotors = countMotors;
         if (AddClass == 1)
             this.iAdditional = new CicleMotors( countMotors );
         if (AddClass == 2)
@@ -41,7 +44,6 @@ public class MotorBoat extends Boat {
             this.iAdditional = new TraungleMotors( countMotors );
     }
 
-    /// <summary>
     @Override
     public void DrawTransport(Graphics g) {
         super.DrawTransport( g );
@@ -63,5 +65,13 @@ public class MotorBoat extends Boat {
         if (Motors) {
             iAdditional.drawMotors( g, DopColor, _startPosX, _startPosY );
         }
+    }
+
+    public int getAddClass() {
+        return addClass;
+    }
+
+    public int getCountMotors() {
+        return countMotors;
     }
 }
