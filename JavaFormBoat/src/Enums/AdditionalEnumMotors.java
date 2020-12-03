@@ -1,14 +1,23 @@
+package Enums;
+
 public enum AdditionalEnumMotors {
 
-    oneMotors( 1 ),
+    oneMotors,
 
-    twoMotors( 2 ),
+    twoMotors,
 
-    threeMotors( 3 );
+    threeMotors;
 
-    private int value;
-
-    AdditionalEnumMotors(int Value) {
-        this.value = Value;
+    public static AdditionalEnumMotors definitionEnumMotors(int countMotors) {
+        if (countMotors == 1) {
+            return oneMotors;
+        }
+        if (countMotors == 2) {
+            return twoMotors;
+        }
+        if (countMotors == 3) {
+            return threeMotors;
+        }
+        return null;
     }
 }
