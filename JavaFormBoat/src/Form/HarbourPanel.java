@@ -5,14 +5,15 @@ import java.awt.*;
 import Boat.Boat;
 import Boat.Harbour;
 import Logics.IAdditional;
+import Boat.Vehicle;
 
 public class HarbourPanel extends Panel {
     private static final long serialVersionUID = 1L;
 
     private Harbour<Boat, IAdditional> harbour;
 
-    public HarbourPanel(Harbour<Boat, IAdditional> park) {
-        this.harbour = park;
+    public HarbourPanel(Harbour<Boat, IAdditional> harbour) {
+        this.harbour = harbour;
     }
 
     public void paint(Graphics g) {
@@ -20,5 +21,9 @@ public class HarbourPanel extends Panel {
         if (harbour != null) {
             harbour.Draw( g );
         }
+    }
+
+    public void setHarbour(Harbour<Boat, IAdditional> harbour) {
+        this.harbour = harbour;
     }
 }
