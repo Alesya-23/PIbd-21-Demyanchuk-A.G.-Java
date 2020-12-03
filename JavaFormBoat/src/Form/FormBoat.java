@@ -127,7 +127,6 @@ public class FormBoat implements Updated {
                         boatPanel.getWidth(), boatPanel.getHeight() );
                 lblTypeMotors.setText( "Тип моторов: " );
                 lblCountMotors.setText( "Кол-во моторов: " );
-
                 boatPanel.repaint();
             }
         } );
@@ -174,7 +173,7 @@ public class FormBoat implements Updated {
         }
     }
 
-    @Override
+  @Override
     public void update() {
         if (boat != null)
             boatPanel.repaint();
