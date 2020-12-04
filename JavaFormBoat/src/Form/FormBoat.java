@@ -33,7 +33,6 @@ public class FormBoat implements Updated {
     JLabel lblCountMotors;
     JLabel lblTypeMotors;
 
-
     public void run() {
         EventQueue.invokeLater( new Runnable() {
             public void run() {
