@@ -41,7 +41,6 @@ public class Boat extends Vehicle {
             case Left:
                 if (_startPosX - step > 0) {
                     _startPosX = ((int) (_startPosX - step));
-
                 }
                 break;
             //вверх

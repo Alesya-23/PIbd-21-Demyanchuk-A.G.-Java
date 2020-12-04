@@ -15,7 +15,6 @@ import javax.swing.UIManager;
 import javax.swing.JLabel;
 
 import Boat.Boat;
-import Boat.MotorBoat;
 import Enums.Direction;
 import Logics.Updated;
 
@@ -32,7 +31,6 @@ public class FormBoat implements Updated {
     JButton btnBack;
     JLabel lblCountMotors;
     JLabel lblTypeMotors;
-
 
     public void run() {
         EventQueue.invokeLater( new Runnable() {
