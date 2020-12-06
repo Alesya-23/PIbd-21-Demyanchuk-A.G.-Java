@@ -7,7 +7,7 @@ import java.awt.Graphics;
 
 public class Harbour<T extends ITransportBoat, D extends IAdditional> {
     /// Массив объектов, которые храним
-    public Object[] _places;
+    public ArrayList<T> _places;
     /// Ширина окна отрисовки
     private int pictureWidth;
     /// Высота окна отрисовки
@@ -17,15 +17,14 @@ public class Harbour<T extends ITransportBoat, D extends IAdditional> {
     /// Размер парковочного места (высота)
     private int _placeSizeHeight = 80;
 
+    private int _maxCount;
+
     /// Конструктор
-    @SuppressWarnings("unchecked")
     public Harbour(int picWidth, int picHeight) {
         int width = picWidth / _placeSizeWidth;
         int height = picHeight / _placeSizeHeight;
-        _places = new Object[width * height];
-        for (int i = 0; i < width * height; i++) {
-            _places[i] = null;
-        }
+        _maxCount = width * height;
+        _places = new ArrayList<T>();
         pictureWidth = picWidth;
         pictureHeight = picHeight;
     }
@@ -33,37 +32,35 @@ public class Harbour<T extends ITransportBoat, D extends IAdditional> {
     /// Перегрузка оператора сложения
     /// Логика действия: на гавань добавляется лодка
     public boolean add(T boat) {
-        int margin = 10;
-        int x = 0;
-        int y = 0;
-        for (int i = 0; i < _places.length; i++) {
-            if (_places[i] == null) {
-                int placesWidth = pictureWidth / _placeSizeWidth;
-                boat.SetPosition( x + 4 * margin + (_placeSizeWidth + margin) * (i % placesWidth),
-                        y + margin + _placeSizeHeight * (i / placesWidth), pictureWidth, pictureHeight );
-                _places[i] = boat;
-                System.out.print( i + "\n" );
-                return true;
-            }
+        if (_places.size() >= _maxCount) {
+            return false;
         }
-        return false;
+        _places.add( boat );
+        return true;
     }
 
     /// Перегрузка оператора вычитания
     /// Логика действия: с гавани забираем лодку
     public T remove(int index) {
-        if (index >= _places.length || index < 0) {
+        if (index < -1 || index > _places.size()) {
             return null;
         }
-        T boat = (T) _places[index];
-        _places[index] = null;
+        T boat = (T) _places.get( index );
+        _places.remove( index );
         return boat;
+    }
+
+    public T get(int index) {
+        if (index >= _places.size() || index < 0) {
+            return null;
+        }
+        return (T) _places.get( index );
     }
 
     public boolean equal(int numBoat) { // ==
         int numCorrectBoat = 0;
-        for (int i = 0; i < _places.length; i++) {
-            if (_places[i] != null) {
+        for (int i = 0; i < _places.size(); i++) {
+            if (_places.get( i ) != null) {
                 numCorrectBoat++;
             }
         }
@@ -74,19 +71,14 @@ public class Harbour<T extends ITransportBoat, D extends IAdditional> {
         return !equal( numBus );
     }
 
-    /// Метод отрисовки парковки
+    /// Метод отрисовки гавани
     public void Draw(Graphics g) {
         DrawMarking( g );
-        int margin = 10;
-        int x = 0;
-        int y = 0;
-        int placesWidth = pictureWidth / _placeSizeWidth;
-        for (int i = 0; i < _places.length; i++) {
-            if (_places[i] != null) {
-                T place = (T) _places[i];
-                place.SetPosition( x + 4 * margin + (_placeSizeWidth + margin) * (i % placesWidth),
-                        y + margin + _placeSizeHeight * (i / placesWidth), pictureWidth, pictureHeight );
-                place.DrawTransport( g );
+        for (int i = 0; i < _places.size(); i++) {
+            if (_places.get( i ) != null) {
+                _places.get( i ).SetPosition( 5 + i / 5 * _placeSizeWidth + 5, i % 5 *
+                        _placeSizeHeight + 15, pictureWidth, pictureHeight );
+                _places.get( i ).DrawTransport( g );
             }
         }
     }
