@@ -7,7 +7,6 @@ import Enums.AdditionalEnumMotors;
 
 public class RectangleMotors implements IAdditional {
     private AdditionalEnumMotors addEnumMotors;
-    public int countMotors;
 
     public RectangleMotors(int CountMotors) {
         setCountMotors( CountMotors );

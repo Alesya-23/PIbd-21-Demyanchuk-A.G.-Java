@@ -10,17 +10,12 @@ import Boat.ITransportBoat;
 import Boat.MotorBoat;
 import Logics.Updated;
 
-public class BoatPanel extends Panel implements ActionListener {
+public class BoatPanel extends Panel {
     private static final long serialVersionUID = 1L;
     private Boat boat;
 
     public BoatPanel(Boat boat) {
         this.boat = boat;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        // TODO Auto-generated method stub
     }
 
     public void paint(Graphics g) {

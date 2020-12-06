@@ -9,34 +9,21 @@ public abstract class Vehicle implements ITransportBoat {
     //левая координата орисовки
     public static int _startPosX;
 
-    /// <summary>
     /// Правая кооридната отрисовки лодки
-    /// </summary>
     public static int _startPosY;
 
-    /// <summary>
-    /// Ширина окна отрисовки         /// </summary>
+    /// Ширина окна отрисовки
     protected int _pictureWidth;
 
-    /// <summary>
     /// Высота окна отрисовки
-    /// </summary>
     protected int _pictureHeight;
 
-    /// <summary>
     /// Максимальная скорость
-    /// </summary>
     public int MaxSpeed;
 
-    /// <summary>
     /// Вес лодки
-    /// </summary>
-
     public float Weight;
 
-    /// <summary>
-    /// Основной цвет корпуса
-    /// </summary>
     /// Основной цвет корпуса
     public Color MainColor;
 
