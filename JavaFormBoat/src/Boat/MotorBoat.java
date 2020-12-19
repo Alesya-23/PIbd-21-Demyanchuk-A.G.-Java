@@ -36,10 +36,10 @@ public class MotorBoat extends Boat {
         this.Motors = motors;
         this.countMotors = countMotors;
         this.AddClass = AddClass;
-        setiAdditional( AddClass );
+        setIAdditional( AddClass );
     }
 
-    private void setiAdditional(int addClass) {
+    private void setIAdditional(int addClass) {
         if (AddClass == 1)
             this.iAdditional = new CicleMotors();
         iAdditional.setCountMotors( countMotors );
@@ -65,7 +65,7 @@ public class MotorBoat extends Boat {
                 Motors = Boolean.parseBoolean( strs[6] );
                 AddClass = Integer.parseInt( strs[7] );
                 countMotors = Integer.parseInt( strs[8] );
-                setiAdditional( AddClass );
+                setIAdditional( AddClass );
             }
         }
     }

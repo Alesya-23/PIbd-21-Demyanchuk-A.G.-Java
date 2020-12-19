@@ -251,8 +251,8 @@ public class FormHarbour {
         } );
         file.add( openFile );
 
-        JMenuItem menuItemSaveSeparateParking = new JMenuItem( "Сохранить текущую парковку" );
-        menuItemSaveSeparateParking.addActionListener( new ActionListener() {
+        JMenuItem saveSeparateHarbour = new JMenuItem( "Сохранить текущую парковку" );
+        saveSeparateHarbour.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter( "Text File", "txt" );
@@ -262,7 +262,7 @@ public class FormHarbour {
                     String filename = fileChooser.getSelectedFile().toString();
                     if (filename.contains( ".txt" )) {
                         try {
-                            harbourCollection.saveSeparateParking( filename, listOfHarbour.getSelectedValue() );
+                            harbourCollection.SaveSeparateHarbour( filename, listOfHarbour.getSelectedValue() );
                             JOptionPane.showMessageDialog( frame, "Сохранили парковку " + listOfHarbour.getSelectedValue() );
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -270,7 +270,7 @@ public class FormHarbour {
                         }
                     } else {
                         try {
-                            harbourCollection.saveSeparateParking( filename + ".txt", listOfHarbour.getSelectedValue() );
+                            harbourCollection.SaveSeparateHarbour( filename + ".txt", listOfHarbour.getSelectedValue() );
                             JOptionPane.showMessageDialog( frame, "Сохранили парковку " + listOfHarbour.getSelectedValue() );
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -282,10 +282,10 @@ public class FormHarbour {
                 }
             }
         } );
-        file.add( menuItemSaveSeparateParking );
+        file.add( saveSeparateHarbour );
 
-        JMenuItem menuItemLoadSeparateParking = new JMenuItem( "Загрузить отдельную парковку" );
-        menuItemLoadSeparateParking.addActionListener( new ActionListener() {
+        JMenuItem loadSeparateHarbour = new JMenuItem( "Загрузить отдельную парковку" );
+        loadSeparateHarbour.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter( "Text File", "txt" );
@@ -294,7 +294,7 @@ public class FormHarbour {
                 if (result == JFileChooser.APPROVE_OPTION) {
                     String filename = fileChooser.getSelectedFile().toString();
                     try {
-                        harbourCollection.loadSeparateParking( filename );
+                        harbourCollection.LoadSeparateHarbour( filename );
                         JOptionPane.showMessageDialog( frame, "Загрузили парковку" );
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -307,7 +307,7 @@ public class FormHarbour {
                 }
             }
         } );
-        file.add( menuItemLoadSeparateParking );
+        file.add( loadSeparateHarbour );
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBounds( 0, 0, 300, 200 );

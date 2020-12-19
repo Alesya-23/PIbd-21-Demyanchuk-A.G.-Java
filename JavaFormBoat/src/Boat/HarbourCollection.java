@@ -115,7 +115,7 @@ public class HarbourCollection {
         }
     }
 
-    public boolean saveSeparateParking(String filename, String name) throws IOException {
+    public boolean SaveSeparateHarbour(String filename, String name) throws IOException {
         if (harbourStages.containsKey( name )) {
             FileWriter fw = new FileWriter( filename );
             fw.write( "HarbourCollection\n" );
@@ -137,7 +137,7 @@ public class HarbourCollection {
         return false;
     }
 
-    public boolean loadSeparateParking(String filename) throws IOException {
+    public boolean LoadSeparateHarbour(String filename) throws IOException {
         FileReader fr = new FileReader( filename );
         BufferedReader reader = new BufferedReader( fr );
         String str = reader.readLine();
