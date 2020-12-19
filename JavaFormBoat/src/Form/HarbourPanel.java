@@ -7,7 +7,7 @@ import Boat.Harbour;
 import Logics.IAdditional;
 import Boat.Vehicle;
 
-public class HarbourPanel extends Panel {
+public class HarbourPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private Harbour<Boat, IAdditional> harbour;

@@ -15,7 +15,6 @@ import javax.swing.UIManager;
 import javax.swing.JLabel;
 
 import Boat.Boat;
-import Boat.MotorBoat;
 import Enums.Direction;
 import Logics.Updated;
 

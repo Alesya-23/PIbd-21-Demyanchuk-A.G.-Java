@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import javax.swing.*;
 
 import Boat.Boat;
-import Boat.MotorBoat;
 import Logics.IAdditional;
 import Boat.Harbour;
 import Boat.HarbourCollection;
@@ -13,7 +12,6 @@ import Boat.HarbourCollection;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.LinkedList;
-import java.util.Random;
 
 public class FormHarbour {
     private JFrame frame;
@@ -22,7 +20,6 @@ public class FormHarbour {
     private Harbour<Boat, IAdditional> harbour;
     private JButton btnTakeBoat;
     private JButton btnTakeLastBoat;
-    private JButton btnParkingBoat;
     private HarbourCollection harbourCollection;
     private JList<String> listOfHarbour;
     private final DefaultListModel<String> listHarborModel = new DefaultListModel<>();
@@ -111,51 +108,18 @@ public class FormHarbour {
         deleteStationButton.setBounds( width, 180, 200, 20 );
         frame.add( deleteStationButton );
 
-        btnParkingBoat = new JButton( "Припарковать лодку" );
-        btnParkingBoat.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                if (listOfHarbour.getSelectedIndex() > -1) {
-                    Color mainColor = JColorChooser.showDialog( frame, "Выберите цвет лодки", Color.BLUE );
-                    if (mainColor != null) {
-                        var boat = new Boat( 100, 1000, mainColor );
-                        if (harbourCollection.get( listHarborModel.get( listOfHarbour.getSelectedIndex() ) ).add( boat )) {
-                            harbourPanel.repaint();
-                        } else {
-                            JOptionPane.showMessageDialog( frame, "Гавань переполнена", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
-                        }
-                    }
-                    harbourPanel.repaint();
-                } else
-                    JOptionPane.showMessageDialog( frame, "Нет гавани для парковки", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
+        JButton addBusButton = new JButton( "Добавить лодку" );
+        addBusButton.addActionListener( e -> EventQueue.invokeLater( () -> {
+            try {
+                FormBoatConfing window = new FormBoatConfing( frame );
+                window.addEvent( this::AddBoat );
+                window.frame.setVisible( true );
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        } );
-        btnParkingBoat.setBounds( 548, 246, 193, 51 );
-        frame.getContentPane().add( btnParkingBoat );
-
-        JButton btnTakeMotorBoat = new JButton( "Припарковать катер" );
-        btnTakeMotorBoat.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                if (listOfHarbour.getSelectedIndex() > -1) {
-                    Color mainColor = JColorChooser.showDialog( frame, "Выберите цвет лодки", Color.BLUE );
-                    Color dopColor = JColorChooser.showDialog( frame, "Выберите цвет лодки", Color.BLUE );
-                    if (mainColor != null) {
-                        Random random = new Random();
-                        int typeMotors = random.nextInt( 3 ) + 1;
-                        int countMotor = random.nextInt( 3 ) + 1;
-                        var motorBoat = new MotorBoat( 100, 1000, mainColor, dopColor, true, true, true, typeMotors, countMotor );
-                        if ((harbourCollection.get( listHarborModel.get( listOfHarbour.getSelectedIndex() ) ).add( motorBoat ))) {
-                            harbourPanel.repaint();
-                        } else {
-                            JOptionPane.showMessageDialog( frame, "Гавань переполнена", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
-                        }
-                        harbourPanel.repaint();
-                    }
-                } else
-                    JOptionPane.showMessageDialog( frame, "Нет гавани для парковки", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
-            }
-        } );
-        btnTakeMotorBoat.setBounds( 548, 213, 193, 29 );
-        frame.getContentPane().add( btnTakeMotorBoat );
+        } ) );
+        addBusButton.setBounds( 533, 220, 200, 20 );
+        frame.getContentPane().add( addBusButton );
 
         textFieldGetPlace = new JTextField();
         textFieldGetPlace.setBounds( 657, 299, 84, 26 );
@@ -166,8 +130,8 @@ public class FormHarbour {
         btnTakeBoat.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 if (listOfHarbour.getSelectedIndex() > -1) {
+                    int numPlace = 0;
                     if (!textFieldGetPlace.getText().equals( "" )) {
-                        int numPlace;
                         try {
                             numPlace = Integer.parseInt( textFieldGetPlace.getText() );
                         } catch (Exception ex) {
@@ -232,11 +196,20 @@ public class FormHarbour {
         for (int i = 0; i < harbourCollection.keys().length; i++) {
             listHarborModel.addElement( harbourCollection.keys()[i] );
         }
-
         if (listHarborModel.size() > 0 && (index == -1 || index >= listHarborModel.size())) {
             listOfHarbour.setSelectedIndex( 0 );
         } else if (listHarborModel.size() > 0 && index > -1 && index < listHarborModel.size()) {
             listOfHarbour.setSelectedIndex( index );
+        }
+    }
+
+    private void AddBoat(Boat boat) {
+        if (boat != null && listOfHarbour.getSelectedIndex() > -1) {
+            if (harbourCollection.get( listHarborModel.get( listOfHarbour.getSelectedIndex() ) ).add( boat )) {
+                harbourPanel.repaint();
+            } else {
+                JOptionPane.showMessageDialog( frame, "Не удалось поставить лодку", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
+            }
         }
     }
 }

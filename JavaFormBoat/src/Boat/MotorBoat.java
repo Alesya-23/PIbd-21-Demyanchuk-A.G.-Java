@@ -34,14 +34,16 @@ public class MotorBoat extends Boat {
         this.SideLine = sideLine;
         this.Cabin = cabin;
         this.Motors = motors;
-        this.addClass = AddClass;
         this.countMotors = countMotors;
         if (AddClass == 1)
-            this.iAdditional = new CicleMotors( countMotors );
+            this.iAdditional = new CicleMotors();
+        iAdditional.setCountMotors( countMotors );
         if (AddClass == 2)
-            this.iAdditional = new RectangleMotors( countMotors );
+            this.iAdditional = new RectangleMotors();
+        iAdditional.setCountMotors( countMotors );
         if (AddClass == 3)
-            this.iAdditional = new TraungleMotors( countMotors );
+            this.iAdditional = new TraungleMotors();
+        iAdditional.setCountMotors( countMotors );
     }
 
     @Override
@@ -73,5 +75,18 @@ public class MotorBoat extends Boat {
 
     public int getCountMotors() {
         return countMotors;
+    }
+
+    public void SetDopColor(Color color) {
+        DopColor = color;
+    }
+
+    public void SetMotors(IAdditional AddClass) {
+        this.iAdditional = AddClass;
+        iAdditional.setCountMotors( countMotors );
+    }
+
+    public void SetCountMotors(int countMotors) {
+        this.countMotors = countMotors;
     }
 }

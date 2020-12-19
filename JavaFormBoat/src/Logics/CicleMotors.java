@@ -8,10 +8,6 @@ import Enums.AdditionalEnumMotors;
 public class CicleMotors implements IAdditional {
     private AdditionalEnumMotors addEnumMotors;
 
-    public CicleMotors(int countMotors) {
-        setCountMotors( countMotors );
-    }
-
     @Override
     public void setCountMotors(int countMotors) {
         addEnumMotors = AdditionalEnumMotors.definitionEnumMotors( countMotors );

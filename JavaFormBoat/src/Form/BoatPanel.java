@@ -10,7 +10,7 @@ import Boat.ITransportBoat;
 import Boat.MotorBoat;
 import Logics.Updated;
 
-public class BoatPanel extends Panel {
+public class BoatPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private Boat boat;
 
