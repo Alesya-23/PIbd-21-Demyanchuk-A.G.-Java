@@ -35,6 +35,11 @@ public class MotorBoat extends Boat {
         this.Cabin = cabin;
         this.Motors = motors;
         this.countMotors = countMotors;
+        this.AddClass = AddClass;
+        setIAdditional( AddClass );
+    }
+
+    private void setIAdditional(int addClass) {
         if (AddClass == 1)
             this.iAdditional = new CicleMotors();
         iAdditional.setCountMotors( countMotors );
@@ -44,6 +49,25 @@ public class MotorBoat extends Boat {
         if (AddClass == 3)
             this.iAdditional = new TraungleMotors();
         iAdditional.setCountMotors( countMotors );
+    }
+
+    /// Конструктор для загрузки с файла
+    public MotorBoat(String info) {
+        {
+            String[] strs = info.split( String.valueOf( separator ) );
+            if (strs.length == 9) {
+                MaxSpeed = Integer.parseInt( strs[0] );
+                Weight = Float.parseFloat( strs[1] );
+                MainColor = Color.decode( strs[2] );
+                DopColor = Color.decode( strs[3] );
+                SideLine = Boolean.parseBoolean( strs[4] );
+                Cabin = Boolean.parseBoolean( strs[5] );
+                Motors = Boolean.parseBoolean( strs[6] );
+                AddClass = Integer.parseInt( strs[7] );
+                countMotors = Integer.parseInt( strs[8] );
+                setIAdditional( AddClass );
+            }
+        }
     }
 
     @Override
@@ -88,5 +112,10 @@ public class MotorBoat extends Boat {
 
     public void SetCountMotors(int countMotors) {
         this.countMotors = countMotors;
+    }
+
+    public String ToString() {
+        return super.ToString() + separator + DopColor.getRGB() + separator +
+                SideLine + separator + Cabin + separator + Motors + separator + AddClass + separator + countMotors;
     }
 }

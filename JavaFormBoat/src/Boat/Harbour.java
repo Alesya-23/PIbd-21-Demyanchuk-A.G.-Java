@@ -76,8 +76,8 @@ public class Harbour<T extends ITransportBoat, D extends IAdditional> {
         DrawMarking( g );
         for (int i = 0; i < _places.size(); i++) {
             if (_places.get( i ) != null) {
-                _places.get( i ).SetPosition( 5 + i / 5 * _placeSizeWidth + 5, i % 5 *
-                        _placeSizeHeight + 15, pictureWidth, pictureHeight );
+                _places.get( i ).SetPosition( 35 + i / 4 * _placeSizeWidth + 5, i % 4 *
+                        _placeSizeHeight + 10, pictureWidth, pictureHeight );
                 _places.get( i ).DrawTransport( g );
             }
         }
@@ -94,5 +94,16 @@ public class Harbour<T extends ITransportBoat, D extends IAdditional> {
             }
             g.drawLine( i * (_placeSizeWidth + interval), 0, i * (_placeSizeWidth + interval), (pictureHeight / _placeSizeHeight) * _placeSizeHeight );
         }
+    }
+
+    public T GetNext(int index) {
+        if (index < 0 || index >= _places.size()) {
+            return null;
+        }
+        return _places.get( index );
+    }
+
+    public void clear() {
+        _places.clear();
     }
 }

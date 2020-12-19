@@ -11,11 +11,26 @@ public class Boat extends Vehicle {
     protected int boatWidth = 103;
     /// Высота отрисовки лодки
     protected int boatHeight = 42;
+    /// Разделитель для записи информации по объекту в файл
+    protected char separator = ';';
+
+    public Boat() {
+    }
 
     public Boat(int maxSpeed, float weight, Color mainColor) {
         this.MaxSpeed = maxSpeed;
         this.Weight = weight;
         this.MainColor = mainColor;
+    }
+
+    /// Конструктор для загрузки с файла
+    public Boat(String info) {
+        String[] strs = info.split( String.valueOf( separator ) );
+        if (strs.length == 3) {
+            MaxSpeed = Integer.parseInt( strs[0] );
+            Weight = Float.parseFloat( strs[1] );
+            MainColor = Color.decode( strs[2] );
+        }
     }
 
     protected Boat(int maxSpeed, float weight, Color mainColor, int boatWidth, int
@@ -66,5 +81,9 @@ public class Boat extends Vehicle {
         g.fillOval( _startPosX, _startPosY, 100, 35 );
         g.setColor( Color.WHITE );
         g.drawLine( _startPosX, _startPosY + 22, _startPosX + 100, _startPosY + 22 );
+    }
+
+    public String ToString() {
+        return "" + MaxSpeed + separator + Weight + separator + MainColor.getRGB();
     }
 }
