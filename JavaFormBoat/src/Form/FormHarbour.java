@@ -147,24 +147,29 @@ public class FormHarbour {
         btnTakeBoat.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 if (listOfHarbour.getSelectedIndex() > -1) {
+                    int numPlace = 0;
                     if (!textFieldGetPlace.getText().equals( "" )) {
                         try {
-                            Boat boat = harbourCollection.get( listOfHarbour.getSelectedValue() )
-                                    .remove( Integer.parseInt( textFieldGetPlace.getText() ) );
-                            logger.info( "Забрана лодка " + boat.toString() );
-                            deleteBoats.add( boat );
-                            harbourPanel.repaint();
-                        } catch (HarbourNotFoundExeption ex) {
-                            logger.warn( "Лодка c таким индексом не найдена" );
-                            JOptionPane.showMessageDialog( frame, "Лодка не найдена" );
+                            numPlace = Integer.parseInt( textFieldGetPlace.getText() );
                         } catch (Exception ex) {
-                            logger.fatal( "Неизвестная ошибка" );
-                            JOptionPane.showMessageDialog( frame, "Лодки с таким индексом нет!", "Ошибка",
-                                    JOptionPane.ERROR_MESSAGE );
+                            logger.error( "Неверный формат номера" );
                         }
-                    } else {
-                        logger.warn( "Индекс не введен" );
-                        JOptionPane.showMessageDialog( frame, "Индекс не введен" );
+                        if ((harbourCollection.get( listHarborModel.get( listOfHarbour.getSelectedIndex() ) ).get( numPlace )) != null) {
+                            try {
+                                var boat = harbourCollection.get( listHarborModel.get( listOfHarbour.getSelectedIndex() ) ).remove( numPlace );
+                                if (boat != null) {
+                                    deleteBoats.add( boat );
+                                    logger.info( "Изьята лодка с места" + numPlace );
+                                    harbourPanel.repaint();
+                                }
+                            } catch (HarbourNotFoundExeption ex) {
+                                JOptionPane.showMessageDialog( frame, "Нет лодки", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
+                                logger.warn( ex.getMessage() );
+                            } catch (Exception ex) {
+                                JOptionPane.showMessageDialog( frame, ex.getMessage(), "Неизвестная ошибка", JOptionPane.ERROR_MESSAGE );
+                                logger.fatal( ex.getMessage() );
+                            }
+                        }
                     }
                 }
             }
