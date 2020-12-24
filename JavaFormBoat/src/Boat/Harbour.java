@@ -5,7 +5,7 @@ import Logics.IAdditional;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Harbour<T extends ITransportBoat, D extends IAdditional> {
+public class Harbour<T extends ITransportBoat, D extends IAdditional> implements Iterator<T> {
     /// Массив объектов, которые храним
     public ArrayList<T> _places;
     /// Ширина окна отрисовки
@@ -17,7 +17,11 @@ public class Harbour<T extends ITransportBoat, D extends IAdditional> {
     /// Размер парковочного места (высота)
     private int _placeSizeHeight = 80;
 
+    private BoatComparer comparer;
+
     private int _maxCount;
+
+    private int currentIndex;
 
     /// Конструктор
     public Harbour(int picWidth, int picHeight) {
@@ -27,13 +31,17 @@ public class Harbour<T extends ITransportBoat, D extends IAdditional> {
         _places = new ArrayList<T>();
         pictureWidth = picWidth;
         pictureHeight = picHeight;
+        currentIndex = -1;
     }
 
     /// Перегрузка оператора сложения
     /// Логика действия: на гавань добавляется лодка
-    public boolean add(T boat) {
+    public boolean add(T boat) throws HarbourOverflowException, HarbourAlreadyHaveException {
         if (_places.size() >= _maxCount) {
             throw new HarbourOverflowException();
+        }
+        if (_places.contains( boat )) {
+            throw new HarbourAlreadyHaveException();
         }
         _places.add( boat );
         return true;
@@ -105,5 +113,24 @@ public class Harbour<T extends ITransportBoat, D extends IAdditional> {
 
     public void clear() {
         _places.clear();
+    }
+
+    public void Sort() {
+        comparer = new BoatComparer();
+        _places.sort( (Comparator<T>) comparer );
+    }
+
+    public Iterator<T> iterator() {
+        return this;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return currentIndex + 1 < _places.size();
+    }
+
+    @Override
+    public T next() {
+        return _places.get( currentIndex++ );
     }
 }
