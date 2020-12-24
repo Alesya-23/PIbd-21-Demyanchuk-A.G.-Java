@@ -33,7 +33,7 @@ public class Harbour<T extends ITransportBoat, D extends IAdditional> {
     /// Логика действия: на гавань добавляется лодка
     public boolean add(T boat) {
         if (_places.size() >= _maxCount) {
-            return false;
+            throw new HarbourOverflowException();
         }
         _places.add( boat );
         return true;
@@ -42,8 +42,8 @@ public class Harbour<T extends ITransportBoat, D extends IAdditional> {
     /// Перегрузка оператора вычитания
     /// Логика действия: с гавани забираем лодку
     public T remove(int index) {
-        if (index < -1 || index > _places.size()) {
-            return null;
+        if (index < 0 || index >= _places.size()) {
+            throw new HarbourNotFoundExeption( index );
         }
         T boat = (T) _places.get( index );
         _places.remove( index );

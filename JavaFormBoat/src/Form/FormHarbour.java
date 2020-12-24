@@ -5,16 +5,23 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Boat.Boat;
+import Exeptions.HarbourNotFoundExeption;
+import Exeptions.HarbourOverflowException;
 import Logics.IAdditional;
 import Boat.Harbour;
 import Boat.HarbourCollection;
+import org.apache.log4j.Logger;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.security.Provider;
 import java.util.LinkedList;
 
+import static org.apache.log4j.LogManager.getLogger;
+
 public class FormHarbour {
+    private static final Logger logger = getLogger( Form.FormHarbour.class );
     private JFrame frame;
     private JTextField textFieldGetPlace;
     private HarbourPanel harbourPanel;
@@ -75,6 +82,7 @@ public class FormHarbour {
                 JOptionPane.showMessageDialog( frame, "Введите название гавани", "Ошибка", JOptionPane.INFORMATION_MESSAGE );
                 return;
             }
+            logger.info( "Добавили гавань " + addNewStationTextField.getText() );
             harbourCollection.AddParking( addNewStationTextField.getText() );
             ReloadLevels();
         } );
@@ -102,6 +110,7 @@ public class FormHarbour {
             if (listOfHarbour.getSelectedIndex() > -1) {
                 if (JOptionPane.showConfirmDialog( frame, "Удалить гавань " + listHarborModel.get( listOfHarbour.getSelectedIndex() ) + "?", "Удаление", JOptionPane.OK_CANCEL_OPTION )
                         == JOptionPane.OK_OPTION) {
+                    logger.info( "Удалили парковку " + addNewStationTextField.getText() );
                     harbourCollection.DelParking( listHarborModel.get( listOfHarbour.getSelectedIndex() ) );
                     ReloadLevels();
                     harbourPanel.repaint();
@@ -117,8 +126,13 @@ public class FormHarbour {
                 FormBoatConfing window = new FormBoatConfing( frame );
                 window.addEvent( this::AddBoat );
                 window.frame.setVisible( true );
+                logger.info( "Добавили лодку " );
+            } catch (HarbourOverflowException ex) {
+                JOptionPane.showMessageDialog( frame, ex.getMessage(), "Переполнение", JOptionPane.ERROR_MESSAGE );
+                logger.warn( ex.getMessage() );
             } catch (Exception ex) {
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog( frame, ex.getMessage(), "Неизвестная ошибка", JOptionPane.ERROR_MESSAGE );
+                logger.fatal( ex.getMessage() );
             }
         } ) );
         addBusButton.setBounds( 533, 220, 200, 20 );
@@ -133,21 +147,24 @@ public class FormHarbour {
         btnTakeBoat.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 if (listOfHarbour.getSelectedIndex() > -1) {
-                    int numPlace = 0;
                     if (!textFieldGetPlace.getText().equals( "" )) {
                         try {
-                            numPlace = Integer.parseInt( textFieldGetPlace.getText() );
+                            Boat boat = harbourCollection.get( listOfHarbour.getSelectedValue() )
+                                    .remove( Integer.parseInt( textFieldGetPlace.getText() ) );
+                            logger.info( "Забрана лодка " + boat.toString() );
+                            deleteBoats.add( boat );
+                            harbourPanel.repaint();
+                        } catch (HarbourNotFoundExeption ex) {
+                            logger.warn( "Лодка c таким индексом не найдена" );
+                            JOptionPane.showMessageDialog( frame, "Лодка не найдена" );
                         } catch (Exception ex) {
-                            return;
+                            logger.fatal( "Неизвестная ошибка" );
+                            JOptionPane.showMessageDialog( frame, "Лодки с таким индексом нет!", "Ошибка",
+                                    JOptionPane.ERROR_MESSAGE );
                         }
-                        if ((harbourCollection.get( listHarborModel.get( listOfHarbour.getSelectedIndex() ) ).get( numPlace )) != null) {
-                            var boat = harbourCollection.get( listHarborModel.get( listOfHarbour.getSelectedIndex() ) ).remove( numPlace );
-                            if (boat != null) {
-                                deleteBoats.add( boat );
-                            }
-                        } else
-                            JOptionPane.showMessageDialog( frame, "Нет лодки", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
-                        harbourPanel.repaint();
+                    } else {
+                        logger.warn( "Индекс не введен" );
+                        JOptionPane.showMessageDialog( frame, "Индекс не введен" );
                     }
                 }
             }
@@ -207,20 +224,24 @@ public class FormHarbour {
                     if (filename.contains( ".txt" )) {
                         try {
                             harbourCollection.SaveData( filename );
-                            JOptionPane.showMessageDialog( frame, "Сохранили" );
-                        } catch (IOException e) {
+                            logger.info( "Сохранено в файл" + filename );
+                        } catch (Exception e) {
+                            logger.error( e.getMessage() );
+                            JOptionPane.showMessageDialog( frame, "Не удалось сохранить файл" );
                             e.printStackTrace();
                         }
                     } else {
                         try {
                             harbourCollection.SaveData( filename + ".txt" );
-                            JOptionPane.showMessageDialog( frame, "Сохранили" );
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            logger.info( "Сохранено в файл" + filename );
+                        } catch (Exception e) {
+                            logger.fatal( e.getMessage() );
                             JOptionPane.showMessageDialog( frame, "Не удалось сохранить файл" );
+                            e.printStackTrace();
                         }
                     }
                 } else {
+                    logger.warn( "Не удалось сохранить файл" );
                     JOptionPane.showMessageDialog( frame, "Не удалось сохранить файл" );
                 }
             }
@@ -237,22 +258,27 @@ public class FormHarbour {
                     String filename = fileChooser.getSelectedFile().toString();
                     try {
                         harbourCollection.LoadData( filename );
-                        JOptionPane.showMessageDialog( frame, "Загрузили" );
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        logger.info( "Загружено из файла " + filename );
+                        ReloadLevels();
+                        frame.repaint();
+                    } catch (HarbourOverflowException ex) {
+                        logger.warn( ex.getMessage() );
+                        JOptionPane.showMessageDialog( frame, "занятое место" );
+                    } catch (Exception ex) {
+                        logger.fatal( ex.getMessage() );
+                        ex.printStackTrace();
                         JOptionPane.showMessageDialog( frame, "Не удалось загрузить файл" );
                     }
-                    ReloadLevels();
-                    frame.repaint();
                 } else {
+                    logger.warn( "Не удалось загрузить файл c парковками" );
                     JOptionPane.showMessageDialog( frame, "Не удалось загрузить файл" );
                 }
             }
         } );
         file.add( openFile );
 
-        JMenuItem saveSeparateHarbour = new JMenuItem( "Сохранить текущую парковку" );
-        saveSeparateHarbour.addActionListener( new ActionListener() {
+        JMenuItem menuItemSaveSeparateParking = new JMenuItem( "Сохранить текущую парковку" );
+        menuItemSaveSeparateParking.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter( "Text File", "txt" );
@@ -262,30 +288,33 @@ public class FormHarbour {
                     String filename = fileChooser.getSelectedFile().toString();
                     if (filename.contains( ".txt" )) {
                         try {
-                            harbourCollection.SaveSeparateHarbour( filename, listOfHarbour.getSelectedValue() );
-                            JOptionPane.showMessageDialog( frame, "Сохранили парковку " + listOfHarbour.getSelectedValue() );
-                        } catch (IOException e) {
+                            harbourCollection.saveSeparateParking( filename, listOfHarbour.getSelectedValue() );
+                            logger.info( "Парковка " + listOfHarbour.getSelectedValue() + " сохранена в файл файла " + filename );
+                        } catch (Exception e) {
+                            logger.error( e.getMessage() );
+                            JOptionPane.showMessageDialog( frame, "Не удалось сохранить файл" );
                             e.printStackTrace();
-                            JOptionPane.showMessageDialog( frame, "Не удалось сохранить выбранную парковку" );
                         }
                     } else {
                         try {
-                            harbourCollection.SaveSeparateHarbour( filename + ".txt", listOfHarbour.getSelectedValue() );
-                            JOptionPane.showMessageDialog( frame, "Сохранили парковку " + listOfHarbour.getSelectedValue() );
-                        } catch (IOException e) {
+                            harbourCollection.saveSeparateParking( filename + ".txt", listOfHarbour.getSelectedValue() );
+                            logger.info( "Парковка " + listOfHarbour.getSelectedValue() + " сохранена в файл файла " + filename );
+                        } catch (Exception e) {
+                            logger.fatal( e.getMessage() );
+                            JOptionPane.showMessageDialog( frame, "Не удалось сохранить файл" );
                             e.printStackTrace();
-                            JOptionPane.showMessageDialog( frame, "Не удалось сохранить выбранную парковку" );
                         }
                     }
                 } else {
+                    logger.warn( "Не удалось сохранить файл" );
                     JOptionPane.showMessageDialog( frame, "Не удалось сохранить файл" );
                 }
             }
         } );
-        file.add( saveSeparateHarbour );
+        file.add( menuItemSaveSeparateParking );
 
-        JMenuItem loadSeparateHarbour = new JMenuItem( "Загрузить отдельную парковку" );
-        loadSeparateHarbour.addActionListener( new ActionListener() {
+        JMenuItem menuItemLoadSeparateParking = new JMenuItem( "Загрузить отдельную парковку" );
+        menuItemLoadSeparateParking.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter( "Text File", "txt" );
@@ -294,21 +323,22 @@ public class FormHarbour {
                 if (result == JFileChooser.APPROVE_OPTION) {
                     String filename = fileChooser.getSelectedFile().toString();
                     try {
-                        harbourCollection.LoadSeparateHarbour( filename );
-                        JOptionPane.showMessageDialog( frame, "Загрузили парковку" );
-                    } catch (IOException e) {
+                        harbourCollection.loadSeparateParking( filename );
+                        logger.info( "Парковка загружена из файла " + filename );
+                    } catch (Exception e) {
+                        logger.error( e.getMessage() );
+                        JOptionPane.showMessageDialog( frame, "Не удалось загрузить парковку" );
                         e.printStackTrace();
-                        JOptionPane.showMessageDialog( frame, "Не удалось загрузить файл" );
                     }
                     ReloadLevels();
                     frame.repaint();
                 } else {
-                    JOptionPane.showMessageDialog( frame, "Не удалось загрузить файл" );
+                    logger.warn( "Загрузка невозможна" );
+                    JOptionPane.showMessageDialog( frame, "Не удалось загрузить парковку" );
                 }
             }
         } );
-        file.add( loadSeparateHarbour );
-
+        file.add( menuItemLoadSeparateParking );
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBounds( 0, 0, 300, 200 );
         menuBar.add( file );
@@ -331,10 +361,13 @@ public class FormHarbour {
 
     private void AddBoat(Boat boat) {
         if (boat != null && listOfHarbour.getSelectedIndex() > -1) {
-            if (harbourCollection.get( listHarborModel.get( listOfHarbour.getSelectedIndex() ) ).add( boat )) {
-                harbourPanel.repaint();
-            } else {
-                JOptionPane.showMessageDialog( frame, "Не удалось поставить лодку", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
+            try {
+                if (harbourCollection.get( listHarborModel.get( listOfHarbour.getSelectedIndex() ) ).add( boat )) {
+                    harbourPanel.repaint();
+                }
+            } catch (HarbourOverflowException ex) {
+                JOptionPane.showMessageDialog( frame, "Нет мест", "Переполнение", JOptionPane.INFORMATION_MESSAGE );
+                logger.warn( ex.getMessage() );
             }
         }
     }

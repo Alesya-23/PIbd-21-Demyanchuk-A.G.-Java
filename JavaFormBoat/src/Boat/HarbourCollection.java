@@ -57,7 +57,7 @@ public class HarbourCollection {
         return harbourStages.get( ind ).get( index );
     }
 
-    public boolean SaveData(String filename) throws IOException {
+    public void SaveData(String filename) {
         FileWriter fs = new FileWriter( filename );
         fs.write( "HarbourCollection" + "\n" );
         for (String level : harbourStages.keySet()) {
@@ -80,16 +80,41 @@ public class HarbourCollection {
             }
         }
         fs.close();
-        return true;
     }
 
     /// Загрузка нформации по лодкам на гаванях из файла
-    public boolean LoadData(String filename) throws IOException {
+    public void SaveData(String filename) throws IOException {
+        FileWriter fs = new FileWriter( filename );
+        fs.write( "HarbourCollection" + "\n" );
+        for (String level : harbourStages.keySet()) {
+            //Начинаем парковку
+            fs.write( "Harbour" + separator + level + "\n" );
+            Boat boat = null;
+            for (int i = 0; (boat = harbourStages.get( level ).get( i )) != null; i++) {
+                if (boat != null) {
+                    //если место не пустое
+                    //Записываем тип лодки
+                    if (boat.getClass().toString().equals( "class Boat.Boat" )) {
+                        fs.write( "Boat" + separator );
+                    }
+                    if (boat.getClass().toString().equals( "class Boat.MotorBoat" )) {
+                        fs.write( "MotorBoat" + separator );
+                    }
+                    //Записываемые параметры
+                    fs.write( boat.ToString() + "\n" );
+                }
+            }
+        }
+        fs.close();
+    }
+
+    /// Загрузка нформации по лодкам на гаванях из файла
+    public void LoadData(String filename) throws IOException {
         FileReader fs = new FileReader( filename );
         BufferedReader reader = new BufferedReader( fs );
         String strs = reader.readLine();
-        if (!(strs.contains( "HarbourCollection" ))) {
-            throw new IllegalArgumentException( "Неверный формат файла" );
+        if (!strs.contains( "HarbourCollection" )) {
+            throw new FileNotFoundException( "Неверный формат файла" );
         } else {
             Boat boat = null;
             String key = "";
@@ -106,16 +131,15 @@ public class HarbourCollection {
                         boat = new MotorBoat( strs.split( String.valueOf( separator ) )[1] );
                     }
                     if (!(harbourStages.get( key ).add( boat ))) {
-                        return false;
+                        throw new IndexOutOfBoundsException( "Не удалось загрузить лодку на парковку" );
                     }
                 }
             }
             fs.close();
-            return true;
         }
     }
 
-    public boolean SaveSeparateHarbour(String filename, String name) throws IOException {
+    public void saveSeparateParking(String filename, String name) throws IOException {
         if (harbourStages.containsKey( name )) {
             FileWriter fw = new FileWriter( filename );
             fw.write( "HarbourCollection\n" );
@@ -132,12 +156,10 @@ public class HarbourCollection {
                 fw.write( boat.ToString() + "\n" );
             }
             fw.close();
-            return true;
-        }
-        return false;
+        } else throw new NullPointerException();
     }
 
-    public boolean LoadSeparateHarbour(String filename) throws IOException {
+    public void loadSeparateParking(String filename) throws IOException {
         FileReader fr = new FileReader( filename );
         BufferedReader reader = new BufferedReader( fr );
         String str = reader.readLine();
@@ -156,18 +178,17 @@ public class HarbourCollection {
                 }
                 if (str.contains( "Boat" )) {
                     boat = new Boat( str.split( String.valueOf( separator ) )[1] );
-                }
-                if (str.contains( "MotorBoat" )) {
+                } else if (str.contains( "MotorBoat" )) {
                     boat = new MotorBoat( str.split( String.valueOf( separator ) )[1] );
                 }
                 var result = harbourStages.get( key ).add( boat );
                 if (!result) {
-                    return false;
+                    throw new NullPointerException();
                 }
             }
             fr.close();
-            return true;
+        } else {
+            throw new FileNotFoundException( "Неверный формат файла" );
         }
-        return false;
     }
 }
