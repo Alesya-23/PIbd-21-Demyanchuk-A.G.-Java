@@ -8,7 +8,10 @@ import Logics.IAdditional;
 import Logics.RectangleMotors;
 import Logics.TraungleMotors;
 
-public class MotorBoat extends Boat {
+public class MotorBoat extends Boat implements Comparable<Boat> {
+
+    LinkedList<Object> listMotorBoatProperties = new LinkedList<>();
+
     private IAdditional iAdditional;
 
     private Color DopColor;
@@ -36,10 +39,21 @@ public class MotorBoat extends Boat {
         this.Motors = motors;
         this.countMotors = countMotors;
         this.AddClass = AddClass;
-        setIAdditional( AddClass );
+        setiAdditional( AddClass );
+        listMotorBoatProperties.add( MaxSpeed );
+        listMotorBoatProperties.add( Weight );
+        listMotorBoatProperties.add( MainColor );
+        listMotorBoatProperties.add( boatWidth );
+        listMotorBoatProperties.add( boatHeight );
+        listMotorBoatProperties.add( DopColor );
+        listMotorBoatProperties.add( SideLine );
+        listMotorBoatProperties.add( Cabin );
+        listMotorBoatProperties.add( Motors );
+        listMotorBoatProperties.add( countMotors );
+        listMotorBoatProperties.add( AddClass );
     }
 
-    private void setIAdditional(int addClass) {
+    private void setiAdditional(int addClass) {
         if (AddClass == 1)
             this.iAdditional = new CicleMotors();
         iAdditional.setCountMotors( countMotors );
@@ -65,7 +79,18 @@ public class MotorBoat extends Boat {
                 Motors = Boolean.parseBoolean( strs[6] );
                 AddClass = Integer.parseInt( strs[7] );
                 countMotors = Integer.parseInt( strs[8] );
-                setIAdditional( AddClass );
+                setiAdditional( AddClass );
+                listMotorBoatProperties.add( MaxSpeed );
+                listMotorBoatProperties.add( Weight );
+                listMotorBoatProperties.add( MainColor );
+                listMotorBoatProperties.add( boatWidth );
+                listMotorBoatProperties.add( boatHeight );
+                listMotorBoatProperties.add( DopColor );
+                listMotorBoatProperties.add( SideLine );
+                listMotorBoatProperties.add( Cabin );
+                listMotorBoatProperties.add( Motors );
+                listMotorBoatProperties.add( countMotors );
+                listMotorBoatProperties.add( AddClass );
             }
         }
     }
@@ -117,5 +142,95 @@ public class MotorBoat extends Boat {
     public String ToString() {
         return super.ToString() + separator + DopColor.getRGB() + separator +
                 SideLine + separator + Cabin + separator + Motors + separator + AddClass + separator + countMotors;
+    }
+
+    int compareColor(Color x, Color y) {
+        if (x.getRed() != y.getRed()) {
+            return (x.getRed() - y.getRed());
+        }
+        if (x.getGreen() != y.getGreen()) {
+            return (x.getGreen() - y.getGreen());
+        }
+        if (x.getBlue() != y.getBlue()) {
+            return (x.getBlue() - y.getBlue());
+        }
+        return 0;
+    }
+
+    @Override
+    public int compareTo(Boat other) {
+        if (other instanceof MotorBoat) {
+            if (DopColor != ((MotorBoat) other).DopColor) {
+                return compareColor( DopColor, ((MotorBoat) other).DopColor );
+            }
+            if ((SideLine) != ((MotorBoat) other).SideLine) {
+                return Boolean.compare( SideLine, ((MotorBoat) other).SideLine );
+            }
+            if (Cabin != ((MotorBoat) other).Cabin) {
+                return Boolean.compare( Cabin, ((MotorBoat) other).Cabin );
+            }
+            if (Motors != ((MotorBoat) other).Motors) {
+                return Boolean.compare( Motors, ((MotorBoat) other).Motors );
+            }
+            if (countMotors != ((MotorBoat) other).countMotors) {
+                return Integer.compare( countMotors, ((MotorBoat) other).countMotors );
+            }
+            if (AddClass != ((MotorBoat) other).AddClass) {
+                return Integer.compare( AddClass, ((MotorBoat) other).AddClass );
+            }
+            return 0;
+        }
+        return super.compareTo( other );
+    }
+
+    public boolean equals(MotorBoat other) {
+        if (other == null) {
+            return false;
+        }
+        if (getClass().getName() != other.getClass().getName()) {
+            return false;
+        }
+        if (DopColor != other.DopColor) {
+            return false;
+        }
+        if (SideLine != other.SideLine) {
+            return false;
+        }
+        if (Cabin != other.Cabin) {
+            return false;
+        }
+        if (Motors != other.Motors) {
+            return false;
+        }
+        if (AddClass != other.AddClass) {
+            return false;
+        }
+        if (countMotors != other.countMotors) {
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Перегрузка метода от object
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof MotorBoat)) {
+            return false;
+        } else {
+            return equals( (MotorBoat) obj );
+        }
+    }
+
+    public void printMotorBoatProperties() {
+        for (Object ourMotorBoat : listMotorBoatProperties) {
+            System.out.println( ourMotorBoat );
+        }
     }
 }

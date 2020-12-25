@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Boat.Boat;
+import Exeptions.HarbourAlreadyHaveException;
 import Exeptions.HarbourNotFoundExeption;
 import Exeptions.HarbourOverflowException;
 import Logics.IAdditional;
@@ -126,9 +127,8 @@ public class FormHarbour {
                 FormBoatConfing window = new FormBoatConfing( frame );
                 window.addEvent( this::AddBoat );
                 window.frame.setVisible( true );
-                logger.info( "Добавили лодку " );
             } catch (HarbourOverflowException ex) {
-                JOptionPane.showMessageDialog( frame, ex.getMessage(), "Переполнение", JOptionPane.ERROR_MESSAGE );
+                JOptionPane.showMessageDialog( frame, ex.getMessage(), "Не найдено", JOptionPane.ERROR_MESSAGE );
                 logger.warn( ex.getMessage() );
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog( frame, ex.getMessage(), "Неизвестная ошибка", JOptionPane.ERROR_MESSAGE );
@@ -204,10 +204,22 @@ public class FormHarbour {
         btnTakeLastBoat.setBounds( 605, 381, 115, 29 );
         frame.getContentPane().add( btnTakeLastBoat );
 
+        JButton btnSort = new JButton( "Сортировать" );
+        btnSort.addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                if (listOfHarbour.getSelectedIndex() > -1) {
+                    harbourCollection.get( listOfHarbour.getSelectedValue() ).Sort();
+                    harbourPanel.repaint();
+                    logger.info( "Сортировка уровней" );
+                }
+            }
+        } );
+        btnSort.setBounds( 605, 411, 115, 29 );
+        frame.getContentPane().add( btnSort );
+
         JLabel lblPlaceBoat = new JLabel( "Место" );
         lblPlaceBoat.setBounds( 574, 302, 69, 20 );
         frame.getContentPane().add( lblPlaceBoat );
-
         JLabel lblPickUpBoat = new JLabel( "Забрать лодку" );
         lblPickUpBoat.setBounds( 592, 263, 115, 20 );
         frame.getContentPane().add( lblPickUpBoat );
@@ -357,6 +369,7 @@ public class FormHarbour {
         for (int i = 0; i < harbourCollection.keys().length; i++) {
             listHarborModel.addElement( harbourCollection.keys()[i] );
         }
+
         if (listHarborModel.size() > 0 && (index == -1 || index >= listHarborModel.size())) {
             listOfHarbour.setSelectedIndex( 0 );
         } else if (listHarborModel.size() > 0 && index > -1 && index < listHarborModel.size()) {
@@ -368,11 +381,19 @@ public class FormHarbour {
         if (boat != null && listOfHarbour.getSelectedIndex() > -1) {
             try {
                 if (harbourCollection.get( listHarborModel.get( listOfHarbour.getSelectedIndex() ) ).add( boat )) {
+                    logger.info( "Добавили лодку " );
                     harbourPanel.repaint();
+                } else {
+                    JOptionPane.showMessageDialog( frame, "Не удалось поставить лодку", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
                 }
+                harbourPanel.repaint();
             } catch (HarbourOverflowException ex) {
-                JOptionPane.showMessageDialog( frame, "Нет мест", "Переполнение", JOptionPane.INFORMATION_MESSAGE );
+                JOptionPane.showMessageDialog( frame, "Не удалось поставить лодку", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
                 logger.warn( ex.getMessage() );
+            } catch (HarbourAlreadyHaveException ex) {
+                JOptionPane.showMessageDialog( frame, "Такая лодка уже есть", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog( frame, "Неизвестая ошибка", "Сообщение", JOptionPane.INFORMATION_MESSAGE );
             }
         }
     }
